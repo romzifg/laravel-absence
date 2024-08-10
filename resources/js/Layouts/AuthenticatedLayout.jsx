@@ -9,6 +9,24 @@ export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
+    const menu = [
+        {
+            name: "Dashboard",
+            href: route("dashboard"),
+            current: route().current("dashboard"),
+        },
+        {
+            name: "Users",
+            href: route("dashboard"),
+            current: route().current("dashboard"),
+        },
+        {
+            name: "Absence",
+            href: route("dashboard"),
+            current: route().current("dashboard"),
+        },
+    ];
+
     return (
         <div className="min-h-screen bg-gray-100">
             <nav className="bg-white border-b border-gray-100">
@@ -22,24 +40,15 @@ export default function Authenticated({ user, header, children }) {
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route("dashboard")}
-                                    active={route().current("dashboard")}
-                                >
-                                    Dashboard
-                                </NavLink>
-                                <NavLink
-                                    href={route("dashboard")}
-                                    active={route().current("dashboard")}
-                                >
-                                    Users
-                                </NavLink>
-                                <NavLink
-                                    href={route("dashboard")}
-                                    active={route().current("dashboard")}
-                                >
-                                    Absence
-                                </NavLink>
+                                {menu.map((el, key) => (
+                                    <NavLink
+                                        key={key}
+                                        href={el.href}
+                                        active={el.current}
+                                    >
+                                        {el.name}
+                                    </NavLink>
+                                ))}
                             </div>
                         </div>
 
@@ -138,24 +147,14 @@ export default function Authenticated({ user, header, children }) {
                     }
                 >
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink
-                            href={route("dashboard")}
-                            active={route().current("dashboard")}
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route("dashboard")}
-                            active={route().current("dashboard")}
-                        >
-                            Users
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route("dashboard")}
-                            active={route().current("dashboard")}
-                        >
-                            Absence
-                        </ResponsiveNavLink>
+                        {menu.map((el, key) => (
+                            <ResponsiveNavLink
+                                href={el.href}
+                                active={el.current}
+                            >
+                                {el.name}
+                            </ResponsiveNavLink>
+                        ))}
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
