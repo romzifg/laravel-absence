@@ -19,9 +19,12 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth', 'admin'])->group(function() {
     Route::get('/users', [UserController::class, 'index'])->name('users');
-    Route::post('/users', [UserController::class, 'index'])->name('users.create');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/edit/{userId}', [UserController::class, 'edit'])->name('users.edit');
+    Route::patch('/users/update/{userId}', [UserController::class, 'update'])->name('users.update');
 });
 
 Route::middleware('auth')->group(function () {

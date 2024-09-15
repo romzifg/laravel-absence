@@ -1,0 +1,216 @@
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import PrimaryButton from "@/Components/PrimaryButton";
+import Selectbox from "@/Components/Selectbox";
+import TextInput from "@/Components/TextInput";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Transition } from "@headlessui/react";
+import { Head, useForm } from "@inertiajs/react";
+import roles from "@/helper/data/roles.json"
+
+export default function UserCreate({ auth }) {
+    const { data, setData, post, errors, processing, recentlySuccessful } =
+        useForm({
+            name: "",
+            email: "",
+            password: "",
+            confirm_password: "",
+            role: "",
+        });
+
+    const submit = (e) => {
+        e.preventDefault();
+
+        post(route("users.store"), {
+            preserveScroll: true,
+            onSuccess: () => {
+                alert("User Created");
+            },
+            onError: (e) => {
+                alert("User not Created");
+            },
+        });
+    };
+
+    return (
+        <AuthenticatedLayout
+            user={auth.user}
+            header={
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                    Create User
+                </h2>
+            }
+        >
+            <Head title="Create User" />
+
+            <div className="py-12">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div className="p-6 text-gray-900">
+                            <section className="max-w-xl">
+                                <header>
+                                    <h2 className="text-lg font-medium text-gray-900">
+                                        Profile Information
+                                    </h2>
+
+                                    <p className="mt-1 text-sm text-gray-600">
+                                        Update your account's profile
+                                        information and email address.
+                                    </p>
+                                </header>
+
+                                <form
+                                    onSubmit={submit}
+                                    className="mt-6 space-y-6"
+                                >
+                                    <div>
+                                        <InputLabel
+                                            htmlFor="name"
+                                            value="Name"
+                                        />
+
+                                        <TextInput
+                                            id="name"
+                                            className="mt-1 block w-full"
+                                            value={data.name}
+                                            onChange={(e) =>
+                                                setData("name", e.target.value)
+                                            }
+                                            required
+                                            isFocused
+                                            autoComplete="name"
+                                        />
+
+                                        <InputError
+                                            className="mt-2"
+                                            message={errors.name}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <InputLabel
+                                            htmlFor="email"
+                                            value="Email"
+                                        />
+
+                                        <TextInput
+                                            id="email"
+                                            type="email"
+                                            className="mt-1 block w-full"
+                                            value={data.email}
+                                            onChange={(e) =>
+                                                setData("email", e.target.value)
+                                            }
+                                            required
+                                            autoComplete="username"
+                                        />
+
+                                        <InputError
+                                            className="mt-2"
+                                            message={errors.email}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <InputLabel
+                                            htmlFor="role"
+                                            value="Role"
+                                        />
+
+                                        <Selectbox
+                                            onChange={(e) =>
+                                                setData("role", e.target.value)
+                                            }
+                                            id="role"
+                                            currentValue={data.role}
+                                            options={roles}
+                                        />
+
+                                        <InputError
+                                            className="mt-2"
+                                            message={errors.role}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <InputLabel
+                                            htmlFor="password"
+                                            value="Password"
+                                        />
+
+                                        <TextInput
+                                            id="password"
+                                            value={data.password}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "password",
+                                                    e.target.value
+                                                )
+                                            }
+                                            type="password"
+                                            className="mt-1 block w-full"
+                                            required
+                                            isFocused
+                                            autoComplete="password"
+                                        />
+
+                                        <InputError
+                                            className="mt-2"
+                                            message={errors.password}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <InputLabel
+                                            htmlFor="confirm_password"
+                                            value="Confirm Password"
+                                        />
+
+                                        <TextInput
+                                            id="confirm_password"
+                                            type="password"
+                                            className="mt-1 block w-full"
+                                            value={data.confirm_password}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "confirm_password",
+                                                    e.target.value
+                                                )
+                                            }
+                                            required
+                                            isFocused
+                                            autoComplete="confirm_password"
+                                        />
+
+                                        <InputError
+                                            className="mt-2"
+                                            message={errors.confirm_password}
+                                        />
+                                    </div>
+
+                                    <div className="flex items-center gap-4">
+                                        <PrimaryButton disabled={processing}>
+                                            Save
+                                        </PrimaryButton>
+
+                                        <Transition
+                                            show={recentlySuccessful}
+                                            enter="transition ease-in-out"
+                                            enterFrom="opacity-0"
+                                            leave="transition ease-in-out"
+                                            leaveTo="opacity-0"
+                                        >
+                                            <p className="text-sm text-gray-600">
+                                                Saved.
+                                            </p>
+                                        </Transition>
+                                    </div>
+                                </form>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </AuthenticatedLayout>
+    );
+}
